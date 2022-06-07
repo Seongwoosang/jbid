@@ -8,18 +8,15 @@ import "./qrgen.css";
 
 function QRgenerator() {
   // const [qr, setQr] = useState("");
-  const [Major, setMajor] = useState("");
-  const [StdNum, setStdNum] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Name, setName] = useState("");
+  const [major, setmajor] = useState("");
+  const [stdNum, setstdNum] = useState("");
+  const [did, setdid] = useState("");
+  const [name, setname] = useState("");
   const handleChange = (event) => {
-    setEmail(event.currentTarget.value);
-
-    setName(event.currentTarget.value);
-
-    setMajor(event.currentTarget.value);
-
-    setStdNum(event.currentTarget.value);
+    setname(event.currentTarget.value);
+    setmajor(event.currentTarget.value);
+    setstdNum(event.currentTarget.value);
+    setdid(event.currentTarget.value);
     // setQr();
     // localStorage.getItem("Major", JSON.stringify({ Major }))
     // localStorage.getItem("StdNum", JSON.stringify({ StdNum }))
@@ -28,12 +25,12 @@ function QRgenerator() {
     // localStorage.getItem("Password", JSON.stringify({ Password }))
   };
 
-  let nm = localStorage.getItem("Name", JSON.stringify({ Name }));
-  let mj = localStorage.getItem("Major", JSON.stringify({ Major }));
-  let stm = localStorage.getItem("StdNum", JSON.stringify({ StdNum }));
-  let em = localStorage.getItem("Email", JSON.stringify({ Email }));
+  let nm = localStorage.getItem("name", JSON.stringify({ name }));
+  let mj = localStorage.getItem("major", JSON.stringify({ major }));
+  let stm = localStorage.getItem("stdNum", JSON.stringify({ stdNum }));
+  let em = localStorage.getItem("did", JSON.stringify({ did }));
 
-  const qr = [];
+  let qr;
 
   qr.push(nm, mj, stm, em);
 

@@ -32,6 +32,9 @@ function RegisterPage(props) {
     setConfirmPassword(event.currentTarget.value);
   };
 
+  // localStorage.setItem("Email", JSON.stringify({ Email }));
+  // localStorage.setItem("Name", JSON.stringify({ Name }));
+
   // const onMajorHandler = (event) => {
   //   setMajor(event.currentTarget.value);
   // };
@@ -58,9 +61,9 @@ function RegisterPage(props) {
     dispatch(registerUser(body)).then((response) => {
       if (response.payload.success === true) {
         alert("회원 정보 입력 완료");
-        navigate("/login");
+        navigate("/StdIdRegister");
       } else {
-        alert("Filed to sign up");
+        alert("Failed to sign up");
       }
     });
   };

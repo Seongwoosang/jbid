@@ -10,6 +10,7 @@ import {
   REGISTER_USER,
   AUTH_USER,
   STUIDREGISTER_USER,
+  GENERATEDID_USER,
 } from "./types";
 
 export function loginUser(dataToSubmit) {
@@ -42,6 +43,16 @@ export function stdIdRegister(dataToSubmit) {
     .then((response) => response.data);
   return {
     type: STUIDREGISTER_USER,
+    payload: request,
+  };
+}
+
+export function generateDID(dataToSubmit) {
+  const request = axios
+    .post("/api/generateDID", dataToSubmit)
+    .then((response) => response.data);
+  return {
+    type: GENERATEDID_USER,
     payload: request,
   };
 }

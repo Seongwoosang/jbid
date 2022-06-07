@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import "./home.css";
 import Register from "../../Modal/Register";
 import Login from "../../Modal/Login";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../../_actions/user_action";
 
 const Home = () => {
   const [LoginOpen, setLoginOpen] = useState(false);
   const [modalOpen, setRegisterOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  dispatch(auth()).then((res) => {
+    if (res.payload.isAuth) {
+      navigate("/studentID");
+    }
+  });
 
   return (
     <div className="home">

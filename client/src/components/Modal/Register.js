@@ -48,9 +48,9 @@ const Register = ({ setOpenModal }) => {
     dispatch(registerUser(body)).then((response) => {
       if (response.payload.success === true) {
         alert("회원 정보 입력 완료");
-        navigate("/");
+        navigate("/StdIdRegister");
       } else {
-        alert("Filed to sign up");
+        alert("Failed to sign up");
       }
     });
   };

@@ -6,6 +6,12 @@ const { User } = require("./models/User");
 const config = require("./config/key");
 const cookieParser = require("cookie-parser");
 const { auth } = require("./middleware/auth");
+const crypto = require("crypto");
+const base62 = require("base62");
+const forge = require("node-forge");
+const mathjs = require("mathjs");
+const fs = require("fs");
+const child_process = require("child_process");
 
 // bodyarser가 서버에서 오는 정보를 분석해서 가져오도록
 // application/x-www-form-urlencoded 데이터를 분석해서 가져옴
@@ -66,13 +72,209 @@ app.post("/api/users/stdIdRegister", (req, res) => {
     { major: req.body.major, stdNum: req.body.stdNum },
     (err, userInfo) => {
       if (err) return res.json({ success: false, err });
-      return res.status(200).json({
-        success: true,
-      });
+      return;
+      // res.status(200).json({
+      //   success: true,
+      // });
     }
   );
+  let token = req.cookies.x_auth;
+  let stdNum = req.body.stdNum;
+  let major = req.body.major;
+  let name, email;
+
+  try {
+    User.find({ token: token }, { _id: 0, email: 1, name: 1 }, (err, data) => {
+      if (err) throw err;
+      if (data) {
+        email = data[0].email;
+        name = data[0].name;
+        console.log(email, name);
+
+        const infoDump = String(stdNum) + String(major) + String(email);
+        console.log("infoDump", infoDump);
+        const infoHash = crypto
+          .createHash("sha256")
+          .update(infoDump)
+          .digest("hex");
+
+        console.log(name);
+        salt = forge.util.encodeUtf8(
+          base62.encode(
+            mathjs.random(1, 99999999999999999999999999999999999999)
+          )
+        );
+        var emailDump = infoHash + String(name) + String(salt);
+        var emailDumpUtf8 = forge.util.encodeUtf8(emailDump);
+        var md = forge.md.sha256.create();
+        var ud = md.update(emailDumpUtf8);
+        const userKey = ud.digest().toHex();
+        const userKeyJson = { userKey: "" };
+        userKeyJson.userKey = userKey;
+        User.updateOne(
+          { token: currentToken },
+          { userKey: userKey },
+          (err, userInfo) => {
+            if (err) return res.json({ success: false, err });
+            return res.status(200).json({
+              success: true,
+              userKey: userKeyJson.userKey,
+              major: major,
+              stdNum: stdNum,
+            });
+          }
+        );
+      }
+    });
+  } catch (err) {
+    return res.json({ msg: "failed_Exception", error: String(err) });
+  }
 });
 
+app.post("/api/generateDID", (req, res) => {
+  const email = findEmailByStdNum;
+  var studentDB = User.find();
+  const userKey = req.body.userKey;
+  const stdNum = req.body.stdNum;
+  const major = req.body.major;
+  var timeStamp = parseInt(new Date().getTime() / 1000);
+  const walletKey = req.body.password;
+  const walletName = crypto
+    .createHash("sha256")
+    .update(email + String(timeStamp))
+    .digest("hex");
+
+  var findEmailByStdNum = User.find(
+    { stdNum: stdNum },
+    { email: 1, _id: 0 },
+    (err, data) => {
+      if (err) throw err;
+      if (data) console.log(data[0].email);
+      return data[0].email;
+    }
+  );
+  const comparePw = User.findOne({ email: findEmailByStdNum }, (err, user) => {
+    if (!user) {
+      let err = new Error("User not found");
+      return err.message;
+    }
+    // 요청된 이메일이 데이터베이스에 있다면 비밀번호가 맞는 비밀번호 인지 확인
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (!isMatch) {
+        let err2 = new Error("Password not found");
+        return err2.message;
+      }
+    });
+  });
+
+  try {
+    if (comparePw === "Password not found") {
+      let err = new Error("password not found");
+      throw err.message;
+    }
+    if (comparePw === "User not found") {
+      let err2 = new Error("Password not found");
+      throw err2.message;
+    } else {
+      let genDID = child_process.spawnSync("python3", [
+        "C:\\Users\\성우상\\OneDrive\\바탕 화면\\cp\\wschain\\indy-scripts\\start_docker\\generate_did.py",
+        walletName,
+        walletKey,
+        stdNum,
+      ]);
+      genDID;
+      console.log("stdout", genDID.stdout.toString());
+    }
+  } catch (err) {
+    return res.json({ msg: "failed_Exception", error: String(err) });
+  }
+
+  try {
+    let jsonData;
+    let error;
+    let did, comp, compUtf8, didTimeHash;
+
+    fs.readFile(
+      "C:\\Users\\성우상\\OneDrive\\바탕 화면\\cp\\wschain\\" +
+        walletName +
+        "_gen_did.json",
+      (err, data) => {
+        // 파일 읽기
+        if (err) {
+          throw err;
+        }
+        let extractData = data.toString();
+        jsonData = JSON.parse(extractData);
+
+        error = jsonData.error;
+
+        if (error === "Error") {
+          fs.unlink(
+            "C:\\Users\\성우상\\OneDrive\\바탕 화면\\cp\\wschain\\" +
+              walletName +
+              "_gen_did.json",
+            (err) => {
+              if (err) throw err;
+            }
+          );
+          return res.json({ msg: "DID generate error" });
+        }
+
+        fs.unlink(
+          "C:\\Users\\성우상\\OneDrive\\바탕 화면\\cp\\wschain\\" +
+            walletName +
+            "_gen_did.json",
+          (err) => {
+            if (err) throw err;
+          }
+        );
+
+        did = jsonData.did;
+
+        comp = String(did) + String(walletKey);
+        compUtf8 = forge.util.encodeUtf8(comp);
+        didTimeHash = crypto
+          .createHash("sha256")
+          .update(compUtf8)
+          .digest("hex");
+
+        var issuedData = {
+          email: "",
+          userKey: "",
+          walletId: "",
+          did: "",
+          didTimeHash: "",
+        };
+        issuedData.email = email;
+        issuedData.userKey = userKey;
+        issuedData.walletId = walletName;
+        issuedData.did = did;
+        issuedData.didTimeHash = didTimeHash;
+
+        User.updateMany(
+          { stdNum: stdNum },
+          {
+            did: issuedData.did,
+            walletId: issuedData.walletId,
+            didTimeHash: issuedData.didTimeHash,
+          },
+          (err, userInfo) => {
+            if (err) return res.json({ success: false, err });
+            return res.status(200).json({
+              success: true,
+              did: did,
+              error: error,
+            });
+          }
+        );
+
+        // return res.json({ 'did': did, 'error': error });
+      }
+    );
+  } catch (err) {
+    return res.json({ msg: "failed_Exception", error: String(err) });
+  }
+});
 // 로그인
 app.post("/api/users/login", (req, res) => {
   // 요청된 이메일을 데이터베이스에서 있는지 찾는다
