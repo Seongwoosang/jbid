@@ -7,6 +7,7 @@ import { BsCheckLg } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import "./StdIdRegister.css";
 import Password from "../../Modal/Password";
+import MAJOR_DATA from "./MajorData";
 
 function StdIdRegisterPage(props) {
   const [PasswordOpen, setPasswordOpen] = useState(false);
@@ -15,7 +16,8 @@ function StdIdRegisterPage(props) {
 
   const [Major, setMajor] = useState("");
   const [StdNum, setStdNum] = useState("");
-  let [On, setOn] = useState(true);
+  const [OnIssue, setOnIssue] = useState(true);
+  const [selectedMajorValue, setSelectedMajorValue] = useState("");
 
   const onMajorHandler = (event) => {
     setMajor(event.currentTarget.value);
@@ -23,6 +25,14 @@ function StdIdRegisterPage(props) {
 
   const onStdNumHandler = (event) => {
     setStdNum(event.currentTarget.value);
+  };
+
+  const handleMajorProduct = (e) => {
+    const { value } = e.target;
+    // 상품코드에 넣을 데이터
+    setSelectedMajorValue(
+      MAJOR_DATA.filter((el) => el.value === value)[0].value
+    );
   };
 
   const onSubmitHandler = (event) => {
@@ -33,20 +43,22 @@ function StdIdRegisterPage(props) {
     // }
 
     let body = {
-      major: Major,
+      major: selectedMajorValue,
       stdNum: StdNum,
     };
 
     dispatch(stdIdRegister(body)).then((response) => {
       if (response.payload.success === true) {
         console.log(response);
+        setSelectedMajorValue("학과를 선택하세요.");
         localStorage.setItem("major", response.payload.major);
         localStorage.setItem("stdNum", response.payload.stdNum);
         localStorage.setItem("userKey", response.payload.userKey);
         alert("정상적으로 회원 정보가 등록되었습니다. 학생증을 발급해주세요!");
         // navigate("/studentID");
-        setOn(!setOn);
+        setOnIssue(!OnIssue);
       } else {
+        setSelectedMajorValue("학과를 선택하세요.");
         alert("회원가입에 실패했습니다.");
       }
     });
@@ -74,18 +86,25 @@ function StdIdRegisterPage(props) {
           <h3>학생증 발급</h3>
           <div className="stdRegister-content">
             <div className="form-div">
-              {On === true ? (
+              {OnIssue === true ? (
                 <form onSubmit={onSubmitHandler}>
                   <h3>Student ID</h3>
-
                   <label>학과 *</label>
-                  <input
-                    type="text"
-                    placeholder="학과"
-                    value={Major}
-                    onChange={onMajorHandler}
+                  <select
+                    // type="text"
+                    // placeholder="학과"
+                    // value={selectedMajorValue}
+                    // onChange={onMajorHandler}
+                    onChange={handleMajorProduct}
                     className="form-control form-group"
-                  />
+                  >
+                    {MAJOR_DATA.map((el) => {
+                      return <option key={el.value}>{el.value}</option>;
+                    })}
+                    <option value={selectedMajorValue}>
+                      {selectedMajorValue}
+                    </option>
+                  </select>
 
                   <label>학번 *</label>
                   <input
@@ -113,6 +132,7 @@ function StdIdRegisterPage(props) {
                     placeholder=""
                     value={localStorage.getItem("major")}
                     className="form-control form-group"
+                    readOnly
                   />
 
                   <label>학번 *</label>
@@ -121,9 +141,9 @@ function StdIdRegisterPage(props) {
                     placeholder=""
                     value={localStorage.getItem("stdNum")}
                     className="form-control form-group"
+                    readOnly
                   />
                   <br />
-                  {/* <div className="d-grid gap-2">회원정보 등록 완료 ! ! ! !</div> */}
                   <div className="stdIdRegister-btn d-grid gap-2">
                     <button disabled className="registerbtn-2 btn btn-block">
                       회원정보 등록 완료&nbsp;&nbsp;

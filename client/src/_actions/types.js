@@ -11,3 +11,4 @@ export const REGISTER_USER = "register_user";
 export const AUTH_USER = "auth_user";
 export const STUIDREGISTER_USER = "stuIdRegister_user";
 export const GENERATEDID_USER = "generateDID_user";
+export const COMPAREPW_USER = "comparepw_user";

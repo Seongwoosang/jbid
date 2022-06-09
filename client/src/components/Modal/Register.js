@@ -5,7 +5,9 @@ import { registerUser } from "../../_actions/user_action";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Modal.css";
 
+
 const Register = ({ setOpenModal }) => {
+  // let { Close } = setOpenModal;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -48,9 +50,10 @@ const Register = ({ setOpenModal }) => {
     dispatch(registerUser(body)).then((response) => {
       if (response.payload.success === true) {
         alert("회원 정보 입력 완료");
-        navigate("/StdIdRegister");
+        navigate("/stdIdRegister"); //꼼수
+        
       } else {
-        alert("Failed to sign up");
+        alert("회원 가입에 실패했습니다.");
       }
     });
   };

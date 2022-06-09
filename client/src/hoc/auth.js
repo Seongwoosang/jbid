@@ -48,7 +48,7 @@ export default function (SpecificComponent, option, adminRoute = null) {
             navigate("/");
           } else {
             // 로그인한 유저가 출입 불가능한 페이지에 들어가려고 할 때
-            if (option === false) navigate("/studentID");
+            // if (option === false) navigate("/studentID");
           }
         }
       });

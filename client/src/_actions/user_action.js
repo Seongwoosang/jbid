@@ -11,6 +11,7 @@ import {
   AUTH_USER,
   STUIDREGISTER_USER,
   GENERATEDID_USER,
+  COMPAREPW_USER,
 } from "./types";
 
 export function loginUser(dataToSubmit) {
@@ -57,12 +58,23 @@ export function generateDID(dataToSubmit) {
   };
 }
 
+
 export function auth() {
   const request = axios
     .get("/api/users/auth")
     .then((response) => response.data);
   return {
     type: AUTH_USER,
+    payload: request,
+  };
+}
+
+export function comPw(dataToSubmit) {
+  const request = axios
+    .post("/api/users/comparePw", dataToSubmit)
+    .then((response) => response.data);
+  return {
+    type: COMPAREPW_USER,
     payload: request,
   };
 }

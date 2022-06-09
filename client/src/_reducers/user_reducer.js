@@ -12,6 +12,7 @@ import {
   REGISTER_USER,
   STUIDREGISTER_USER,
   GENERATEDID_USER,
+  COMPAREPW_USER,
 } from "../_actions/types";
 
 // Action의 type에 따라 변화된 state 반환
@@ -35,7 +36,10 @@ export default function (state = {}, action) {
       break;
     case GENERATEDID_USER:
       return { ...state, generateDIDSuccess: action.payload };
-      break;
+      break;  
+    case COMPAREPW_USER:
+      return { ...state, comparePwSuccess: action.payload };
+      break;  
     default: // state가 들어오지 않았을 경우 전의 state를 넣어줌
       return state;
   }

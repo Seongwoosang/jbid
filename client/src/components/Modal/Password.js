@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import UserList from "../components/UserList";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser, auth, generateDID } from "../../_actions/user_action";
@@ -16,7 +15,7 @@ import {
 import "react-circular-progressbar/dist/styles.css";
 import { easeQuadInOut } from "d3-ease";
 import AnimatedProgressProvider from "./Loading/AnimatedProgressProvider";
-import Spinner from "../Spinner";
+import Spinner from "../Modal/Loading/Spinner";
 
 const percentage = 100;
 
@@ -26,13 +25,11 @@ const Password = ({ setOpenModal }) => {
   let userKey = localStorage.getItem("userKey");
   let stdNum = localStorage.getItem("stdNum");
   let major = localStorage.getItem("major");
-
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [Flick, setFlick] = useState(false);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios.get("https://jsonplaceholder.typicode.com/users").then((response) => {
       setUsers(response.data);
@@ -65,11 +62,13 @@ const Password = ({ setOpenModal }) => {
     // dispatch를 하여 로그인 완료 후 처음 페이지로 이동
     dispatch(generateDID(body)).then((response) => {
       if (response.payload.success === true) {
-        console.log(response);
         localStorage.setItem("did", response.payload.did);
         navigate("/studentID");
-        setFlick(!setFlick);
+        setFlick(!Flick);
       } else {
+        if (response.payload.successPw === false) {
+          return alert("비밀번호를 잘못 입력했습니다. 다시 확인해주세요.");
+        }
         console.log(response);
         alert("DID발급 오류");
       }
@@ -95,7 +94,6 @@ const Password = ({ setOpenModal }) => {
           <div className="form-div">
             <form onSubmit={onSubmitHandler}>
               <h5>비밀번호를 입력해주세요.</h5>
-              {/* <Loading /> */}
               <input
                 type="password"
                 placeholder="Password"

@@ -79,7 +79,7 @@ body {
   /* width: 40%;
   height: 90%; */
   width: 550px;
-  height: 85%;
+  height: 80%;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 14px 14px 14px rgba(34, 35, 58, 0.5);
@@ -110,11 +110,11 @@ body {
 .stdId-card-card {
   display: flex;
   flex-direction: column;
-  padding: 100px 0px 0px 0px;
+  padding: 50px 0px 0px 0px;
 
   align-items: center;
-  width: 90%;
-  height: 90%;
+  width: 80%;
+  height: 70%;
   background-color: #f8f9fa;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
@@ -133,18 +133,6 @@ body {
   width: 40%;
 }
 
-.openModalBtn {
-  width: 100%;
-  border-radius: 2px;
-  border: 1px solid #d32f2f;
-  color: #d32f2f;
-}
-
-.openModalBtn:hover {
-  background-color: #fdf7f7;
-  color: #d32f2f;
-}
-
 .jbLogo {
   display: flex;
   justify-content: center;
@@ -154,4 +142,15 @@ body {
   .stdId-card-2 {
     width: 90%;
   }
+}
+
+.registerbtn {
+  border-radius: 2px;
+  border: 1px solid #d32f2f;
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+.registerbtn:hover {
+  color: #ffffff;
 }

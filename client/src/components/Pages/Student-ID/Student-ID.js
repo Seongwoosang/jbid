@@ -1,42 +1,23 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Breadcrumb, Layout, Menu } from "antd";
-import axios from "axios";
-import { shallowEqual, useSelector } from "react-redux";
+import React, { useState } from "react";
+// import axios from "axios";
 import "./StudentID.css";
-import { auth } from "../../../_actions/user_action";
-import { useDispatch } from "react-redux";
+// import { auth } from "../../../_actions/user_action";
+// import { useDispatch } from "react-redux";
 import Navbar from "../../Nav/Navbar";
+import QrPassword from "../../Modal/QrPassword";
 
-const { Header, Content, Footer } = Layout;
 const StudentID = () => {
-  var deleteCookie = function (name) {
-    document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
-  };
-  const navigate = useNavigate();
-  useEffect(() => {
-    axios.get("/api/hello").then((response) => console.log(response.data));
-  }, []);
+  const [QrPwOpen, setQrPwOpen] = useState(false);
+
   // const user = useSelector((state) => state.user.userData);
   const major = localStorage.getItem("major");
   const stdNum = localStorage.getItem("stdNum");
   const name = localStorage.getItem("name");
 
-  const onClickHandler = () => {
-    axios.get(`/api/users/logout`).then((response) => {
-      if (response.data.success) {
-        localStorage.clear();
-        deleteCookie("x_auth");
-        navigate("/login");
-      } else {
-        alert("로그아웃 하는데 실패 했습니다.");
-      }
-    });
-  };
-
   return (
     <div className="pages">
+      <Navbar />
+      {QrPwOpen && <QrPassword setOpenModal={setQrPwOpen} />}
       <div className="home">
         <div className="home-logo">
           <img className="homeImg" src="img/JBID.png" alt="" />
@@ -50,22 +31,24 @@ const StudentID = () => {
               <div className="stdId-card-2">
                 <div className="stdId-card-card">
                   <h3>중부대학교</h3>
+                  <br />
                   <img className="profileImg" src="img/profile.png" alt="" />
+                  <br />
+                  <br />
                   <p>학번 : {stdNum}</p>
                   <p>성명 : {name}</p>
                   <p>학과 : {major}</p>
-                  <li className="nav-item">
-                    {" "}
-                    <Link
-                      exact
-                      to="/"
-                      activeClassName="active"
-                      className="nav-links"
-                      onClick={onClickHandler}
-                    >
-                      로그아웃
-                    </Link>
-                  </li>
+                </div>
+                <br />
+                <div className="d-grid gap-2">
+                  <button
+                    className="registerbtn btn btn-block"
+                    onClick={() => {
+                      setQrPwOpen(true);
+                    }}
+                  >
+                    학생증 발급
+                  </button>
                 </div>
               </div>
             </div>

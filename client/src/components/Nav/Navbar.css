@@ -13,7 +13,7 @@
   background: none;
 }
 
-path {
+.menu-bars path {
   color: #982532;
 }
 
@@ -75,4 +75,39 @@ path {
 
 span {
   margin-left: 16px;
+}
+
+.nav-content {
+  height: 100%;
+  border-left: solid 1.2px #d3d3d3;
+  border-top: solid 1.2px #d3d3d3;
+}
+
+.logout {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  border-bottom: 1.2px solid #d3d3d3;
+}
+
+.logout p {
+  margin: 0;
+  margin-top: 8px;
+}
+
+.logoutbtn {
+  width: 40%;
+  height: 20%;
+  border-radius: 2px;
+  background-color: #d32f2f;
+}
+
+.nav-links {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.nav-links:hover {
+  color: #ffffff;
 }
