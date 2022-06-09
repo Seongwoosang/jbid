@@ -176,7 +176,7 @@ app.post("/api/generateDID", (req, res) => {
       let err2 = new Error("Password not found");
       throw err2.message;
     } else {
-      let genDID = child_process.spawnSync("python3", [
+      let genDID = child_process.spawnSync("python", [
         "C:\\Users\\성우상\\OneDrive\\바탕 화면\\cp\\wschain\\indy-scripts\\start_docker\\generate_did.py",
         walletName,
         walletKey,

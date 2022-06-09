@@ -21,6 +21,7 @@
     "react": "^18.1.0",
     "react-circular-progressbar": "^2.0.4",
     "react-dom": "^18.1.0",
+    "react-gradient-progress": "^1.0.3",
     "react-icons": "^4.4.0",
     "react-move": "^6.5.0",
     "react-qr-reader": "^3.0.0-beta-1",
