@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
@@ -16,10 +16,9 @@ var getCookie = function (name) {
   return value ? value[2] : null;
 };
 
-
-
 const Navbar = () => {
   const name = localStorage.getItem("name");
+  const did = localStorage.getItem("did");
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
@@ -68,10 +67,14 @@ const Navbar = () => {
                     로그아웃
                   </Link>
                 </button>
-              </div >
-              <br/>
+              </div>
+              <div className="logout">나의 DID : {did}</div>
               <div className="logout">
-                <button onClick={() => window.open('http://3.39.166.191:8080', '_blank')}>
+                <button
+                  onClick={() =>
+                    window.open("http://3.39.166.191:8080", "_blank")
+                  }
+                >
                   트랜잭션, 원장 상태 확인
                 </button>
               </div>

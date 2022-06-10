@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    minlength: 5,
+    minlength: 7,
   },
   major: {
     //학과

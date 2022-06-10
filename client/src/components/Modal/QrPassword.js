@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginUser, auth, generateDID, comPw } from "../../_actions/user_action";
+import {
+  loginUser,
+  auth,
+  generateDID,
+  comPw,
+} from "../../_actions/user_action";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Password.css";
 import { Loading } from "../Modal/Loading/Loading.js";
@@ -17,7 +22,7 @@ const QrPassword = ({ setOpenModal }) => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [QrOpen, setQrOpen] = useState(false);
-  const [Flick , setFlick] = useState(false);
+  const [Flick, setFlick] = useState(false);
   // const [loading, setLoading] = useState(true);
 
   const onPasswordHandler = (event) => {
@@ -43,18 +48,16 @@ const QrPassword = ({ setOpenModal }) => {
     dispatch(comPw(body)).then((response) => {
       if (response.payload.comparePwSuccess === true) {
         setQrOpen(!QrOpen);
-      }
-      else {
+      } else {
         alert("비밀번호를 잘못 입력했습니다. 다시 확인해주세요.");
       }
     });
   };
 
-
   return (
     <div className="modalBackground">
-      <div className="modalContainer-2">
       {QrOpen && <Qr setOpenModal={setQrOpen} />}
+      <div className="modalContainer-2">
         <div className="titleCloseBtn">
           <button
             onClick={() => {
@@ -81,9 +84,15 @@ const QrPassword = ({ setOpenModal }) => {
               />
               <br />
               <div className="d-grid gap-2">
-                <button className="registerbtn btn btn-block" id="cancelBtn" onClick={() => {
-              {setFlick(!Flick)}
-            }}>
+                <button
+                  className="registerbtn btn btn-block"
+                  id="cancelBtn"
+                  onClick={() => {
+                    {
+                      setFlick(!Flick);
+                    }
+                  }}
+                >
                   QR코드 조회하기
                 </button>
               </div>

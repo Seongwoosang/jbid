@@ -5,7 +5,6 @@ import { registerUser } from "../../_actions/user_action";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Modal.css";
 
-
 const Register = ({ setOpenModal }) => {
   // let { Close } = setOpenModal;
   const dispatch = useDispatch();
@@ -33,6 +32,10 @@ const Register = ({ setOpenModal }) => {
   };
 
   const onSubmitHandler = (event) => {
+    // if (Password.length != 8) {
+    //   return alert("비밀번호 8자리를 입력해 주세요");
+    // }
+
     event.preventDefault();
 
     if (Password !== ConfirmPassword) {
@@ -51,7 +54,6 @@ const Register = ({ setOpenModal }) => {
       if (response.payload.success === true) {
         alert("회원 정보 입력 완료");
         navigate("/stdIdRegister"); //꼼수
-        
       } else {
         alert("회원 가입에 실패했습니다.");
       }
@@ -101,6 +103,7 @@ const Register = ({ setOpenModal }) => {
                 type="password"
                 placeholder="Password"
                 value={Password}
+                minlength="7"
                 onChange={onPasswordHandler}
                 className="form-control form-group"
               />

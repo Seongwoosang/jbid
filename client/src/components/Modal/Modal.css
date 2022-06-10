@@ -70,6 +70,20 @@
   cursor: pointer;
 }
 
+.qr-modalBackground {
+  /* width: 100vw;
+  height: 100vh; */
+  width: 100%;
+  height: 100%;
+  /* opacity: 0.5; */
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0%;
+  z-index: 50;
+}
+
 /* #cancelBtn {
   background-color: crimson;
 } */

@@ -23,7 +23,7 @@ function StdIdRegisterPage(props) {
     setMajor(event.currentTarget.value);
   };
 
-  const onStdNumHandler = (event) => {
+  const onStdNumHandler = (event, maxLength) => {
     setStdNum(event.currentTarget.value);
   };
 
@@ -36,6 +36,9 @@ function StdIdRegisterPage(props) {
   };
 
   const onSubmitHandler = (event) => {
+    if (StdNum.length != 8) {
+      return alert("학번 8자리를 입력해 주세요");
+    }
     event.preventDefault();
 
     // if (Password !== ConfirmPassword) {
@@ -109,6 +112,7 @@ function StdIdRegisterPage(props) {
                   <label>학번 *</label>
                   <input
                     type="number"
+                    // maxlength="8"
                     placeholder="학번"
                     value={StdNum}
                     onChange={onStdNumHandler}
